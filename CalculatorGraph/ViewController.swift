@@ -18,7 +18,7 @@ class ViewController: UIViewController {
     let graph = CalculatorGraphic()
     var contentScaleFactor: CGFloat = 1
     let scale: CGFloat = 1.1
-    let str = "200*cos(M*0.03)"
+    let str = "200*sin(M*0.03)"
     var origin: CGPoint = CGPoint.zeroPoint
     //let rect = CGRectMake(0, 0, view.frame.maxX , view.frame.maxY)
     
@@ -33,8 +33,18 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        let panGesture: UIPanGestureRecognizer = UIPanGestureRecognizer(target: self, action: Selector("recognizePanGesture:"))
+        let panGesture = UIPanGestureRecognizer(target: self, action: Selector("recognizePanGesture:"))
         view.addGestureRecognizer(panGesture)
+        
+        let doubleTapGesture = UITapGestureRecognizer(target: self, action: Selector("recognizeDoubleTapGesture:"))
+        doubleTapGesture.numberOfTapsRequired = 2
+        view.addGestureRecognizer(doubleTapGesture)
+        
+        let pinchGesture = UIPinchGestureRecognizer(target: self, action: Selector("recognizePinchGesture:"))
+        view.addGestureRecognizer(pinchGesture)
+        
+        
+        
         origin = CGPoint(x: view.frame.midX   , y: view.frame.midY  )
     
         draw(origin)
@@ -46,7 +56,7 @@ class ViewController: UIViewController {
         
         // Вычисляем функцию по точкам на оси Х внутри rect и рисуем график
         
-        let rect = CGRectMake(0, 0, view.frame.maxX , view.frame.maxY)
+        let rect = CGRectMake(0, 0, self.view.frame.maxX , self.view.frame.maxY)
 
         UIGraphicsBeginImageContext(view.frame.size)
         let context = UIGraphicsGetCurrentContext()
@@ -172,8 +182,32 @@ class ViewController: UIViewController {
                 completion: nil)
         }
     }
+    
+    func recognizeDoubleTapGesture(sender: UIGestureRecognizer)
+    {
+        
+        let location:CGPoint = sender.locationInView(self.view)
+        //println(location)
+        origin = CGPoint(x: location.x   , y: location.y  )
+        
+        draw(origin)
 
 
+    }
+
+    func recognizePinchGesture(sender: UIPinchGestureRecognizer)
+    {
+        //println("fdfd")
+        sender.view!.transform = CGAffineTransformScale(self.view.transform, sender.scale, sender.scale)
+        sender.scale = 1
+        //println(sender.scale)
+        //println(location)
+        //origin = CGPoint(x: location.x   , y: location.y  )
+        
+        //draw(origin)
+        
+        
+    }
 
 
 }
