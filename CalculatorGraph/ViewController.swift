@@ -121,7 +121,7 @@ class ViewController: UIViewController {
     
     func drawText(str: String){
         let numberOne = "Y = " + str
-        let numberOneRect = CGRectMake(imageView.bounds.minX + 30, imageView.bounds.minY + 700, 350, 50)
+        let numberOneRect = CGRectMake(view.frame.maxX - 320, view.frame.maxY - 30, 350, 30)
         let font = UIFont(name: "Academy Engraved LET", size: 24)
         let textStyle = NSMutableParagraphStyle.defaultParagraphStyle()
         let numberOneAttributes = [
