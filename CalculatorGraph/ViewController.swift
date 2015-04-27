@@ -16,7 +16,7 @@ class ViewController: UIViewController {
     let graph = CalculatorGraphic()
     var contentScaleFactor: CGFloat = 1// ???
     let scale: CGFloat = 1.0
-    let str = "200*sin(M*0.03)"
+    let str = "200*cos(M*0.03)"
     var origin = CGPoint.zeroPoint
     var rect = CGRect()
     //let rect = CGRectMake(0, 0, view.frame.maxX , view.frame.maxY)
@@ -160,22 +160,22 @@ class ViewController: UIViewController {
     
     func drawText(str: String){
         let nameFunction = "Y = " + str
-        let sizeFont = CGFloat(24*(view.frame.width/view.bounds.width))
-        println(sizeFont)
-        let font = UIFont(name: "Academy Engraved LET", size: sizeFont)
-        let textStyle = NSMutableParagraphStyle.defaultParagraphStyle()
-        
-        
+        let ratio = CGFloat(view.frame.width/view.bounds.width)
+        println(ratio)
+  
         var nameFunctionRect = CGRect()
         if view.bounds.width >= view.frame.width {
-            nameFunctionRect = CGRect(x: view.frame.width/10 , y: view.frame.height - 30, width: 350, height: 30)
-            
+            nameFunctionRect = CGRect(x: view.frame.width/10 , y: view.frame.height*9/10 , width: 350, height: 30)
+
         }else{
-            nameFunctionRect = CGRect(x: view.bounds.size.width - 320, y: view.bounds.size.height - 30,width:  350, height: 30)
+            nameFunctionRect = CGRect(x: view.bounds.size.width/10, y: (view.bounds.size.height)*9/10, width:  350, height: 30)
+
 
         }
-        //let numberOneRect = CGRectMake(self.view.bounds.size.width - 320, self.view.bounds.size.height - 30, 350, 30)
-        //let numberOneRect = CGRectMake(view.frame.width/10 , view.frame.height - 30, 350, 30)
+        //let font = UIFont(name: "Academy Engraved LET", size: sizeFont)
+        let font = UIFont(name: "Arial", size: 20)
+        let textStyle = NSMutableParagraphStyle.defaultParagraphStyle()
+
         let numberOneAttributes = [
             NSFontAttributeName: font!]
         nameFunction.drawInRect(nameFunctionRect,
@@ -225,10 +225,10 @@ class ViewController: UIViewController {
             finalPoint.x = min(max(finalPoint.x, 0), self.view.frame.size.width)
             finalPoint.y = min(max(finalPoint.y, 0), self.view.frame.size.height)
             
-            let ratio = CGFloat(view.frame.width/view.bounds.width)
+            
             origin.x  = (origin.x + translate.x)
             origin.y = (origin.y + translate.y)
-            //imageView.image = nil
+            
             
             // 5
             UIView.animateWithDuration(Double(slideFactor * 2),
@@ -268,13 +268,19 @@ class ViewController: UIViewController {
     {
         
         let location:CGPoint = sender.locationInView(self.view)
-        println(location)
-        println(view.bounds.size)
-        println(view.frame.size)
+        //println(location)
+        //println(view.bounds.size)
+        //println(view.frame.size)
         
-        
+        let ratio = CGFloat(view.frame.width/view.bounds.width)
+        //println(ratio)
+        if view.bounds.width >= view.frame.width {
+            origin = CGPoint(x: location.x*ratio   , y: location.y*ratio  )
+        }else{
+            origin = CGPoint(x: location.x   , y: location.y  )
+        }
         //println(origin)
-        origin = CGPoint(x: location.x   , y: location.y  )
+        //origin = CGPoint(x: location.x   , y: location.y  )
         //println(origin)
         
         
