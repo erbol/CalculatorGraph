@@ -40,6 +40,7 @@
 		954C441A1AEA6ADD00BB1290 /* CalculatorGraphTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CalculatorGraphTests.swift; sourceTree = "<group>"; };
 		954C44261AEA6F6000BB1290 /* AxesDrawer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AxesDrawer.swift; sourceTree = "<group>"; };
 		954C44281AEA6FC400BB1290 /* CalculatorGraphic.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CalculatorGraphic.swift; sourceTree = "<group>"; };
+		956C258D1AECF7CB005AD484 /* bounds vs frame.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "bounds vs frame.playground"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				954C44061AEA6ADC00BB1290 /* ViewController.swift */,
+				956C258C1AECF79E005AD484 /* Playground */,
 				954C44281AEA6FC400BB1290 /* CalculatorGraphic.swift */,
 				954C44081AEA6ADC00BB1290 /* Main.storyboard */,
 				954C44261AEA6F6000BB1290 /* AxesDrawer.swift */,
@@ -116,6 +118,14 @@
 				954C44191AEA6ADD00BB1290 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		956C258C1AECF79E005AD484 /* Playground */ = {
+			isa = PBXGroup;
+			children = (
+				956C258D1AECF7CB005AD484 /* bounds vs frame.playground */,
+			);
+			name = Playground;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

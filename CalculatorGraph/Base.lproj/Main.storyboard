@@ -16,25 +16,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Td-yg-pu8">
-                                <rect key="frame" x="11" y="20" width="580" height="572"/>
+                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="1Td-yg-pu8">
+                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="k6u-3H-Br4">
-                                <rect key="frame" x="46" y="37" width="46" height="30"/>
-                                <state key="normal" title="Button">
-                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="moveGraph:" destination="BYZ-38-t0r" eventType="touchUpInside" id="9iK-fc-J65"/>
-                                </connections>
-                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="1Td-yg-pu8" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" id="PRy-q4-tuk"/>
-                            <constraint firstItem="1Td-yg-pu8" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" constant="-10" id="VZN-xg-4Pm"/>
-                            <constraint firstItem="1Td-yg-pu8" firstAttribute="bottom" secondItem="wfy-db-euE" secondAttribute="top" constant="-10" id="hsC-1c-OyN"/>
-                            <constraint firstItem="1Td-yg-pu8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" constant="10" id="ioa-uY-ViQ"/>
+                            <constraint firstItem="1Td-yg-pu8" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailing" id="VZN-xg-4Pm"/>
+                            <constraint firstItem="1Td-yg-pu8" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="aEo-5o-4pu"/>
+                            <constraint firstAttribute="bottom" secondItem="1Td-yg-pu8" secondAttribute="bottom" id="iAN-kj-9CR"/>
+                            <constraint firstItem="1Td-yg-pu8" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leading" id="ioa-uY-ViQ"/>
                         </constraints>
                     </view>
                     <connections>
@@ -43,7 +34,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="302" y="178"/>
+            <point key="canvasLocation" x="249" y="98"/>
         </scene>
     </scenes>
 </document>

@@ -13,22 +13,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     
 
-    
-
     let graph = CalculatorGraphic()
-    var contentScaleFactor: CGFloat = 1
-    let scale: CGFloat = 1.1
+    var contentScaleFactor: CGFloat = 1// ???
+    let scale: CGFloat = 1.0
     let str = "200*sin(M*0.03)"
-    var origin: CGPoint = CGPoint.zeroPoint
+    var origin = CGPoint.zeroPoint
+    var rect = CGRect()
     //let rect = CGRectMake(0, 0, view.frame.maxX , view.frame.maxY)
     
-    @IBAction func moveGraph(sender: UIButton) {
-        //imageView.image = nil
-        origin = CGPoint(x: origin.x - 150   , y: origin.y - 150  )
-
-        draw(origin)
-        
-    }
 
 
     override func viewDidLoad() {
@@ -43,40 +35,77 @@ class ViewController: UIViewController {
         let pinchGesture = UIPinchGestureRecognizer(target: self, action: Selector("recognizePinchGesture:"))
         view.addGestureRecognizer(pinchGesture)
         
+        if view.bounds.width >= view.frame.width {
+            origin = CGPoint(x: view.frame.midX   , y: view.frame.midY  )
+            rect = CGRect(x: 0, y: 0, width: view.frame.maxX , height: view.frame.maxY)
+            
+        }else{
+            
+            origin = CGPoint(x: view.bounds.midX   , y: view.bounds.midY  )
+            rect = CGRect(x: 0, y: 0, width:  view.bounds.size.width, height: view.bounds.size.height)
+            //rect = CGRect(x: view.bounds.size.width - 320, y: view.bounds.size.height - 30,width:  350, height: 30)
+            
+        }
+        
+
         
         
-        origin = CGPoint(x: view.frame.midX   , y: view.frame.midY  )
+        //origin = CGPoint(x: view.frame.midX   , y: view.frame.midY  )
+        //rect = CGRect(x: 0, y: 0, width: view.frame.maxX , height: view.frame.maxY)
     
-        draw(origin)
+        draw()
     }
     
-    func draw(origin:CGPoint){
+    func draw(){
         
         //imageView.image = nil
         
         // Вычисляем функцию по точкам на оси Х внутри rect и рисуем график
         
-        let rect = CGRectMake(0, 0, self.view.frame.maxX , self.view.frame.maxY)
+        //let rect = CGRectMake(0, 0, self.view.bounds.maxX , self.view.bounds.maxY)
+        var size = CGSize.zeroSize
+        
+        if view.bounds.width >= view.frame.width {
 
-        UIGraphicsBeginImageContext(view.frame.size)
+            rect = CGRect(x: 0, y: 0, width: view.frame.maxX , height: view.frame.maxY)
+            size = self.view.frame.size
+            //origin = CGPoint(x: self.view.frame.midX   , y: self.view.frame.midY  )
+            //println(1)
+
+        }else{
+            rect = CGRect(x: 0, y: 0, width:  view.bounds.size.width, height: view.bounds.size.height)
+            size = self.view.bounds.size
+            //origin = CGPoint(x: self.view.bounds.midX   , y: self.view.bounds.midY  )
+            //println(2)
+        }
+
+        //println(size)
+        //println(self.origin)
+
+
+        
+
+        
+
+        UIGraphicsBeginImageContext(size)
+        
         let context = UIGraphicsGetCurrentContext()
 
         
         // Рисуем график
-        drawGraphicFunction(rect,origin: origin,scale: scale, str: str,context: context)
-        //drawGraphic1(rect,origin: origin,scale: scale, str: str,context: context)
+        drawGraphicFunction(context)
         // Рисуем оси координат внутри rect
-        drawAxes(rect, origin: origin, scale: scale, context : context)
+        drawAxes(context)
         
         drawText(str)
-        // Do any additional setup after loading the view, typically from a nib.
+
         imageView.image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
     }
 
     
     
-    func drawGraphicFunction(rect: CGRect,origin : CGPoint, scale : CGFloat, str: String, context : CGContext){
+    func drawGraphicFunction( context : CGContext){
         
         // Строим стек для расчета функции
         graph.parseString(str)
@@ -130,17 +159,32 @@ class ViewController: UIViewController {
 
     
     func drawText(str: String){
-        let numberOne = "Y = " + str
-        let numberOneRect = CGRectMake(view.frame.maxX - 320, view.frame.maxY - 30, 350, 30)
-        let font = UIFont(name: "Academy Engraved LET", size: 24)
+        let nameFunction = "Y = " + str
+        let sizeFont = CGFloat(24*(view.frame.width/view.bounds.width))
+        println(sizeFont)
+        let font = UIFont(name: "Academy Engraved LET", size: sizeFont)
         let textStyle = NSMutableParagraphStyle.defaultParagraphStyle()
+        
+        
+        var nameFunctionRect = CGRect()
+        if view.bounds.width >= view.frame.width {
+            nameFunctionRect = CGRect(x: view.frame.width/10 , y: view.frame.height - 30, width: 350, height: 30)
+            
+        }else{
+            nameFunctionRect = CGRect(x: view.bounds.size.width - 320, y: view.bounds.size.height - 30,width:  350, height: 30)
+
+        }
+        //let numberOneRect = CGRectMake(self.view.bounds.size.width - 320, self.view.bounds.size.height - 30, 350, 30)
+        //let numberOneRect = CGRectMake(view.frame.width/10 , view.frame.height - 30, 350, 30)
         let numberOneAttributes = [
             NSFontAttributeName: font!]
-        numberOne.drawInRect(numberOneRect,
+        nameFunction.drawInRect(nameFunctionRect,
             withAttributes:numberOneAttributes)
+        
+
     }
     
-    func drawAxes(rect : CGRect, origin : CGPoint, scale: CGFloat, context : CGContext){
+    func drawAxes(context : CGContext){
         let bounds = rect
         
         AxesDrawer(contentScaleFactor: contentScaleFactor)
@@ -149,10 +193,25 @@ class ViewController: UIViewController {
     
     func recognizePanGesture(sender: UIPanGestureRecognizer)
     {
-        var translate = sender.translationInView(self.view)
+        /*
+        var initialCenter = CGPoint.zeroPoint
+        if (sender.state == UIGestureRecognizerState.Began)
+        {
+            initialCenter = sender.view!.center
+        }
+        let translation = sender.translationInView(sender.view!) //[sender translationInView:sender.view]
+        let ratio = CGFloat(view.frame.width/view.bounds.width)
+        sender.view!.center = CGPointMake((initialCenter.x + translation.x)/ratio,
+            (initialCenter.y + translation.y)/ratio)
+        origin = CGPoint(x: sender.view!.center.x  , y: sender.view!.center.y  )
+        */
+        
+        //let location:CGPoint = sender.locationInView(self.view)
+        
+        var translate = sender.translationInView(view)
         if sender.state == UIGestureRecognizerState.Ended {
             // 1
-            let velocity = sender.velocityInView(self.view)
+            let velocity = sender.velocityInView(view)
             let magnitude = sqrt((velocity.x * velocity.x) + (velocity.y * velocity.y))
             let slideMultiplier = magnitude / 200
             //println("magnitude: \(magnitude), slideMultiplier: \(slideMultiplier)")
@@ -163,12 +222,13 @@ class ViewController: UIViewController {
             var finalPoint = CGPoint(x:sender.view!.center.x + (velocity.x * slideFactor),
                 y:sender.view!.center.y + (velocity.y * slideFactor))
             // 4
-            finalPoint.x = min(max(finalPoint.x, 0), self.view.bounds.size.width)
-            finalPoint.y = min(max(finalPoint.y, 0), self.view.bounds.size.height)
+            finalPoint.x = min(max(finalPoint.x, 0), self.view.frame.size.width)
+            finalPoint.y = min(max(finalPoint.y, 0), self.view.frame.size.height)
             
-            self.origin.x  += translate.x
-            self.origin.y += translate.y
-            self.imageView.image = nil
+            let ratio = CGFloat(view.frame.width/view.bounds.width)
+            origin.x  = (origin.x + translate.x)
+            origin.y = (origin.y + translate.y)
+            //imageView.image = nil
             
             // 5
             UIView.animateWithDuration(Double(slideFactor * 2),
@@ -177,20 +237,48 @@ class ViewController: UIViewController {
                 // 6
                 options: UIViewAnimationOptions.CurveEaseOut,
                 
-                animations: { self.draw(self.origin)},
+                animations: { self.draw()},
                 
                 completion: nil)
         }
+
+
+/*
+        let ratio = CGFloat(view.frame.width/view.bounds.width)
+        var loc1 = CGPoint.zeroPoint
+        var loc2 = CGPoint.zeroPoint
+        if (sender.state == UIGestureRecognizerState.Began)
+        {
+            loc1 = sender.locationInView(self.view)
+        }
+        
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            loc2 = sender.locationInView(self.view)
+            origin = CGPoint(x: (origin.x + loc2.x - loc1.x)/ratio  , y: (origin.y + loc2.y - loc1.y)/ratio  )
+            
+        }
+
+        draw()
+*/
+
     }
     
-    func recognizeDoubleTapGesture(sender: UIGestureRecognizer)
+    func recognizeDoubleTapGesture(sender: UITapGestureRecognizer)
     {
         
         let location:CGPoint = sender.locationInView(self.view)
-        //println(location)
-        origin = CGPoint(x: location.x   , y: location.y  )
+        println(location)
+        println(view.bounds.size)
+        println(view.frame.size)
         
-        draw(origin)
+        
+        //println(origin)
+        origin = CGPoint(x: location.x   , y: location.y  )
+        //println(origin)
+        
+        
+        draw()
 
 
     }
@@ -198,9 +286,36 @@ class ViewController: UIViewController {
     func recognizePinchGesture(sender: UIPinchGestureRecognizer)
     {
         //println("fdfd")
-        sender.view!.transform = CGAffineTransformScale(self.view.transform, sender.scale, sender.scale)
+        //sender.view!.transform = CGAffineTransformScale(self.view.transform, sender.scale, sender.scale)
+        
+        if (sender.state == UIGestureRecognizerState.Began)
+        {
+            //println(sender.scale)
+        }
+        
+        
+        
+        view!.transform = CGAffineTransformScale(self.view.transform, sender.scale, sender.scale)
+        
+        if sender.state == UIGestureRecognizerState.Ended {
+            //println(self.view.bounds.size.width)
+            //println(view.bounds.size.width)
+            
+           
+            
+            
+            //println(self.view.frame.width)
+            //println(view.frame.width)
+            
+            
+        }
+        
         sender.scale = 1
-        //println(sender.scale)
+        //println(self.origin)
+        
+        
+        
+        
         //println(location)
         //origin = CGPoint(x: location.x   , y: location.y  )
         
