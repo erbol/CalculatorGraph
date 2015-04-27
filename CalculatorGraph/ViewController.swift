@@ -15,8 +15,9 @@ class ViewController: UIViewController {
 
     let graph = CalculatorGraphic()
     var contentScaleFactor: CGFloat = 1// ???
-    let scale: CGFloat = 1.0
-    let str = "200*cos(M*0.03)"
+    let scale: CGFloat = 20.0
+    //let str = "200*cos(M*0.03)"
+    let str = "M*M/5"
     var origin = CGPoint.zeroPoint
     var rect = CGRect()
     //let rect = CGRectMake(0, 0, view.frame.maxX , view.frame.maxY)
@@ -126,15 +127,15 @@ class ViewController: UIViewController {
         // Положение точки origin задается относительно rect.origin
         // Поэтому если origin находится левее rect.origin left будет положительным
         // и наоборот если origin находится правее rect.origin то left будет отрицательным
-        let left:Int = Int((rect.minX - origin.x)/scale)
+        let left:Int = Int((rect.minX - origin.x))
         //println(left)
         
         // расстояние по оси х от точки начала координат рисуемых осей до правой границы прямоугольника построения
         
-        let right:Int = Int((rect.maxX - origin.x)/scale)
+        let right:Int = Int((rect.maxX - origin.x))
         
         // Рассчитываем функцию
-        var data = graph.graphData(left,right: right)
+        var data = graph.graphData(left,right: right, scale: scale)
         
         CGContextBeginPath(context)
         
@@ -143,7 +144,7 @@ class ViewController: UIViewController {
             let point = data.removeAtIndex(0)
             //println(point.x)
             //println(point.y)
-            if (point.x == CGFloat(left)) {
+            if (point.x == CGFloat(left)/scale) {
                 //----------------------------------------------
                 CGContextMoveToPoint(context, point.x*scale+origin.x, -point.y*scale+origin.y)
             }
@@ -161,7 +162,7 @@ class ViewController: UIViewController {
     func drawText(str: String){
         let nameFunction = "Y = " + str
         let ratio = CGFloat(view.frame.width/view.bounds.width)
-        println(ratio)
+        //println(ratio)
   
         var nameFunctionRect = CGRect()
         if view.bounds.width >= view.frame.width {

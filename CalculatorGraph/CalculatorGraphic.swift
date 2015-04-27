@@ -124,22 +124,23 @@ class CalculatorGraphic{
     }
 
     
-    func  graphData(left:Int,right:Int)->[CGPoint]{
+    func  graphData(left:Int,right:Int, scale:CGFloat)->[CGPoint]{
         
 
         data = []
-        for var i = left; i < right; i += 2 {
+        for var i = left; i < right; i += 1 {
             // Подставляем значение для переменной М и вызываем функцию evaluate 
             // для получения значения функции
             // Полученные значения помещаем в массив Data
-            variableValues["M"] = Double(CGFloat(i))
+            variableValues["M"] = Double(CGFloat(i)/scale)
             let oo = evaluate(opStack)
-            var o = CGPoint(x: Double(CGFloat(i)), y: oo.result!)
+            var o = CGPoint(x: Double(CGFloat(i)/scale), y: oo.result!)
             
             data.append(o)
             
         }
-        //println(data)
+        println(data)
+        println(data.count)
 
         return data
     }
