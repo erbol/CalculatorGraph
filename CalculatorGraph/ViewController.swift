@@ -15,9 +15,10 @@ class ViewController: UIViewController {
 
     let graph = CalculatorGraphic()
     var contentScaleFactor: CGFloat = 1// ???
-    let scale: CGFloat = 20.0
-    //let str = "200*cos(M*0.03)"
-    let str = "M*M/5"
+    let scale: CGFloat = 31.0
+    //let str = "sin(sqrt(M*sin(M*0.03)))"
+    let str = "M*M/2"
+    //let scale: CGFloat = 20.0 для функции "M*M/5"
     var origin = CGPoint.zeroPoint
     var rect = CGRect()
     //let rect = CGRectMake(0, 0, view.frame.maxX , view.frame.maxY)

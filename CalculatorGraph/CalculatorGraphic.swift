@@ -99,7 +99,9 @@ class CalculatorGraphic{
     var parse = [Character]()
     // Массив для хранения данных для построения кривой
     var data = [CGPoint]()
-    var origin = CGPoint(x: 200, y: 300)
+
+    
+
     
     
     
@@ -120,6 +122,7 @@ class CalculatorGraphic{
         learnOp(Op.UnaryOperation("cos",cos, nil))
         learnOp(Op.Constant("π",{M_PI}))
         learnOp(Op.Constant("e",{M_E}))
+        learnOp(Op.UnaryOperation("±", { -$0 }, nil))
         learnOp(Op.Variable("M"))
     }
 
@@ -127,20 +130,31 @@ class CalculatorGraphic{
     func  graphData(left:Int,right:Int, scale:CGFloat)->[CGPoint]{
         
 
+        // Очищаем массив
         data = []
         for var i = left; i < right; i += 1 {
             // Подставляем значение для переменной М и вызываем функцию evaluate 
             // для получения значения функции
             // Полученные значения помещаем в массив Data
-            variableValues["M"] = Double(CGFloat(i)/scale)
-            let oo = evaluate(opStack)
-            var o = CGPoint(x: Double(CGFloat(i)/scale), y: oo.result!)
             
-            data.append(o)
+            // Задаем значение переменной от левой к правой границе интервала
+            let varX = Double(CGFloat(i)/scale)
+            variableValues["M"] = varX
+            // Вычисляем функцию
+            if !opStack.isEmpty{
+                let varY = evaluate(opStack)
+                // Задаем значение для CG точки
+                var point = CGPoint(x: varX, y: varY.result!)
+            
+                data.append(point)
+            } else{
+                println("opStack is empty")
+                break
+            }
             
         }
-        println(data)
-        println(data.count)
+        //println(data)
+        //println(data.count)
 
         return data
     }
@@ -233,9 +247,10 @@ class CalculatorGraphic{
             }
 
             // Проверка символа - какая операция, константа или переменная
+            
             switch symbol{
                 // Константы и переменные
-            case "p":
+            case "π":
                     if let operation = knownOps["π"]{
                         opStack += [operation]
                     }
@@ -246,22 +261,26 @@ class CalculatorGraphic{
 
             case "M": opStack += [Op.Variable("M")]
                 // Операции
-            case "q":
-                // корень квадратный
-                
-                pushStack(4)
-                stack += [.Value("sqrt",4)]
-                    
             case "s":
-                    parse.removeAtIndex(0)
+                if parse.removeAtIndex(0) == "i"{
                     parse.removeAtIndex(0)
                     pushStack(4)
                     stack += [.Value("sin",4)]
+                }else{
+                    parse.removeAtIndex(0)
+                    parse.removeAtIndex(0)
+                    pushStack(4)
+                    stack += [.Value("sqrt",4)]
+                }
+                
             case "c":
                     parse.removeAtIndex(0)
                     parse.removeAtIndex(0)
                     pushStack(4)
                     stack += [.Value("cos",4)]
+            case "±":
+                pushStack(4)
+                stack += [.Value("±",4)]
             case "-":
                 pushStack(2)
                 stack += [.Value("−",2)]
@@ -289,7 +308,11 @@ class CalculatorGraphic{
                             }
                         }
                     }
-            default: break
+            default:
+                stack = []
+                opStack = []
+                parse = []
+                break // Если знак операции не известен удаляем данные из всех массивов где содержатся данные о строке с выражением
             }
                 
         }

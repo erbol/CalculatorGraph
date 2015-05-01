@@ -82,11 +82,11 @@
 		954C44011AEA6ADC00BB1290 /* CalculatorGraph */ = {
 			isa = PBXGroup;
 			children = (
-				954C44061AEA6ADC00BB1290 /* ViewController.swift */,
 				956C258C1AECF79E005AD484 /* Playground */,
 				954C44281AEA6FC400BB1290 /* CalculatorGraphic.swift */,
-				954C44081AEA6ADC00BB1290 /* Main.storyboard */,
+				954C44061AEA6ADC00BB1290 /* ViewController.swift */,
 				954C44261AEA6F6000BB1290 /* AxesDrawer.swift */,
+				954C44081AEA6ADC00BB1290 /* Main.storyboard */,
 				954C44021AEA6ADC00BB1290 /* Supporting Files */,
 			);
 			path = CalculatorGraph;
