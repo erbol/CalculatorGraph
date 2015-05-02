@@ -130,6 +130,7 @@ class CalculatorGraphic{
     func  graphData(left:Int,right:Int, scale:CGFloat)->[CGPoint]{
         
 
+        
         // Очищаем массив
         data = []
         for var i = left; i < right; i += 1 {
@@ -232,6 +233,9 @@ class CalculatorGraphic{
     }
     
     func parseString(input:String){
+        
+        // Очищаем стек
+        opStack = []
         // Массив куда помещается входная строка input
         // Получаем массив Character
         parse = Array(input)
