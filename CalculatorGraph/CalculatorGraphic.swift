@@ -140,11 +140,19 @@ class CalculatorGraphic{
             // Задаем значение переменной от левой к правой границе интервала
             let varX = Double(CGFloat(i)/scale)
             variableValues["M"] = varX
-            // Вычисляем функцию
+            // Вычисляем выражение если его поместили в стек
+            // Если стек выражения пустой то выходим
+            var point = CGPoint.zeroPoint
             if !opStack.isEmpty{
+                
                 let varY = evaluate(opStack)
+                if varY.result!.isNaN {
+                    point = CGPoint(x: varX, y: 0)
+                }else{
+                    point = CGPoint(x: varX, y: varY.result!)
+                }
                 // Задаем значение для CG точки
-                var point = CGPoint(x: varX, y: varY.result!)
+                
             
                 data.append(point)
             } else{
@@ -217,7 +225,11 @@ class CalculatorGraphic{
         return (nil,ops)
     }
 
-    
+    private func clearArray(){
+        stack = []
+        opStack = []
+        parse = []
+    }
     
     func parseString(input:String){
         // Массив куда помещается входная строка input
@@ -262,22 +274,52 @@ class CalculatorGraphic{
             case "M": opStack += [Op.Variable("M")]
                 // Операции
             case "s":
-                if parse.removeAtIndex(0) == "i"{
-                    parse.removeAtIndex(0)
-                    pushStack(4)
-                    stack += [.Value("sin",4)]
+                let o = parse.removeAtIndex(0)
+                if  o == "i"{
+                    if parse.removeAtIndex(0) == "n"{
+                        pushStack(4)
+                        stack += [.Value("sin",4)]
+                    }else{
+                        clearArray()
+                        break
+                    }
+
+                    
                 }else{
-                    parse.removeAtIndex(0)
-                    parse.removeAtIndex(0)
-                    pushStack(4)
-                    stack += [.Value("sqrt",4)]
+                    if o == "q"{
+                        if parse.removeAtIndex(0) == "r"{
+                            if parse.removeAtIndex(0) == "t"{
+                                pushStack(4)
+                                stack += [.Value("√",4)]
+                            }else{
+                                clearArray()
+                                break
+                            }
+                        }else{
+                            clearArray()
+                            break
+                        }
+                    }else{
+                        clearArray()
+                        break
+                    }
                 }
                 
             case "c":
-                    parse.removeAtIndex(0)
-                    parse.removeAtIndex(0)
-                    pushStack(4)
-                    stack += [.Value("cos",4)]
+                    if parse.removeAtIndex(0) == "o"{
+                        if parse.removeAtIndex(0) == "s"{
+                            pushStack(4)
+                            stack += [.Value("cos",4)]
+                        }else{
+                            clearArray()
+                            break
+                        }
+                    }else{
+                        clearArray()
+                        break
+                    }
+                
+                
             case "±":
                 pushStack(4)
                 stack += [.Value("±",4)]
@@ -309,9 +351,7 @@ class CalculatorGraphic{
                         }
                     }
             default:
-                stack = []
-                opStack = []
-                parse = []
+                clearArray()
                 break // Если знак операции не известен удаляем данные из всех массивов где содержатся данные о строке с выражением
             }
                 
@@ -326,6 +366,7 @@ class CalculatorGraphic{
         //println(opStack)
     }
     
+    /*
     private func pushStack1(s:Int){
         while !stack.isEmpty{
             // Достаем элемент из стека операций
@@ -349,6 +390,7 @@ class CalculatorGraphic{
             }
         }
     }
+    */
     
     // Если токен является оператором *, /, + или -, поместить его в opstack. Однако, перед этим вытолкнуть любой из операторов, уже находящихся в opstack, если он имеет больший или равный приоритет, и добавить его в результирующий список.
     

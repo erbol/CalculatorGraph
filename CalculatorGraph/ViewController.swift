@@ -17,7 +17,7 @@ class ViewController: UIViewController {
     var contentScaleFactor: CGFloat = 1// ???
     let scale: CGFloat = 31.0
     //let str = "sin(sqrt(M*sin(M*0.03)))"
-    let str = "M*M/2"
+    let str = "sqrt(M*M*M)"
     //let scale: CGFloat = 20.0 для функции "M*M/5"
     var origin = CGPoint.zeroPoint
     var rect = CGRect()
