@@ -227,6 +227,7 @@ class CalculatorGraphic{
     }
 
     private func clearArray(){
+        println("Неопознан символ операции или константы")
         stack = []
         opStack = []
         parse = []
@@ -239,19 +240,21 @@ class CalculatorGraphic{
         // Массив куда помещается входная строка input
         // Получаем массив Character
         parse = Array(input)
+        //println(parse)
         // Строка куда помещаем очередной символ из массива parseArray для его анализа
         var buffer = ""
         // Читаем посимвольно массив parse и классифицируем его содержимое, слева-напрвво, до конца
         while !parse.isEmpty {
             // Помещаем очередной элемент массива в буфер
             var symbol = parse.removeAtIndex(0)
+            //println(symbol)
             buffer = ""
             buffer.append(symbol)
             // Проверка символа - не число ли ?
             if let number = buffer.toDouble(){
                 // Если число то :
                 if parse.isEmpty{
-                // Если входной массив пустой, то вставляем число в выходной массив и заканчиваем парсинг
+                    // Если входной массив пустой, то вставляем число в выходной массив и заканчиваем парсинг
                     opStack += [Op.Operand(buffer.toDouble()!)]
                     break
                 }else{
@@ -261,69 +264,62 @@ class CalculatorGraphic{
                     continue
                 }
             }
-
+            
             // Проверка символа - какая операция, константа или переменная
             
             switch symbol{
                 // Константы и переменные
             case "π":
-                    if let operation = knownOps["π"]{
-                        opStack += [operation]
-                    }
+                if let operation = knownOps["π"]{
+                    opStack += [operation]
+                }
             case "e":
-                    if let operation = knownOps["e"]{
-                        opStack += [operation]
-                    }
-
+                if let operation = knownOps["e"]{
+                    opStack += [operation]
+                }
+                
             case "M": opStack += [Op.Variable("M")]
                 // Операции
             case "s":
-                let o = parse.removeAtIndex(0)
-                if  o == "i"{
-                    if parse.removeAtIndex(0) == "n"{
+                
+                if parse.count >= 2 {
+                    let first = parse.removeAtIndex(0)
+                    let second = parse.removeAtIndex(0)
+                    
+                    if first == "i" && second == "n"{
                         pushStack(4)
                         stack += [.Value("sin",4)]
                     }else{
                         clearArray()
                         break
                     }
-
-                    
                 }else{
-                    if o == "q"{
-                        if parse.removeAtIndex(0) == "r"{
-                            if parse.removeAtIndex(0) == "t"{
-                                pushStack(4)
-                                stack += [.Value("√",4)]
-                            }else{
-                                clearArray()
-                                break
-                            }
-                        }else{
-                            clearArray()
-                            break
-                        }
-                    }else{
-                        clearArray()
-                        break
-                    }
+                    clearArray()
+                    break
                 }
                 
+                
+                
             case "c":
-                    if parse.removeAtIndex(0) == "o"{
-                        if parse.removeAtIndex(0) == "s"{
-                            pushStack(4)
-                            stack += [.Value("cos",4)]
-                        }else{
-                            clearArray()
-                            break
-                        }
+                if parse.count >= 2 {
+                    let first = parse.removeAtIndex(0)
+                    let second = parse.removeAtIndex(0)
+                    
+                    if first == "o" && second == "s"{
+                        pushStack(4)
+                        stack += [.Value("cos",4)]
                     }else{
                         clearArray()
                         break
                     }
+                }else{
+                    clearArray()
+                    break
+                }
                 
-                
+            case "√":
+                pushStack(4)
+                stack += [.Value("√",4)]
             case "±":
                 pushStack(4)
                 stack += [.Value("±",4)]
@@ -342,23 +338,26 @@ class CalculatorGraphic{
                 // Скобки
             case "(": stack += [.Value("(",0)]
             case ")":
-                    var flag = true
-                    while flag && !stack.isEmpty{
-                        let temp = stack.removeLast()
-                        temp.description
-                        if temp.description == "("{
-                            flag = false
-                        }else{
-                            if let operation = knownOps[temp.description]{
-                                opStack += [operation]
-                            }
+                var flag = true
+                while flag && !stack.isEmpty{
+                    let temp = stack.removeLast()
+                    temp.description
+                    if temp.description == "("{
+                        flag = false
+                    }else{
+                        if let operation = knownOps[temp.description]{
+                            opStack += [operation]
                         }
                     }
+                }
+            case " ": break
             default:
+                
+                
                 clearArray()
                 break // Если знак операции не известен удаляем данные из всех массивов где содержатся данные о строке с выражением
             }
-                
+            
         }
         // Если стек операций не пустой то переносим все операции в выходной стек
         while !stack.isEmpty{
